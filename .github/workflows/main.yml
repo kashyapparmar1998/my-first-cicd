@@ -1,0 +1,20 @@
+name: My First CI Pipeline
+
+# આ પાઇપલાઇન ક્યારે ચાલશે? જ્યારે 'main' બ્રાન્ચ પર કોડ push થાય ત્યારે[cite: 12, 23].
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # આ ટેસ્ટ કયા ઓપરેટિંગ સિસ્ટમ સર્વર પર રન થશે? (Ubuntu/Linux પર) [cite: 13]
+    runs-on: ubuntu-latest
+
+    steps:
+    # ૧. સૌથી પહેલા તમારો કોડ આ સર્વર પર ડાઉનલોડ (Checkout) થશે
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # ૨. સર્વર પર એક સાદો મેસેજ પ્રિન્ટ કરીને ચેક કરીશું કે પાઇપલાઇન ચાલે છે કે નહીં
+    - name: Run a test message
+      run: echo "Hello! My first CI/CD pipeline is working perfectly!"
