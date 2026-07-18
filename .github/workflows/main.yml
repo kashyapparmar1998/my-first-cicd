@@ -1,20 +1,33 @@
-name: My First CI Pipeline
+name: Deploy Website to GitHub Pages
 
-# આ પાઇપલાઇન ક્યારે ચાલશે? જ્યારે 'main' બ્રાન્ચ પર કોડ push થાય ત્યારે[cite: 12, 23].
 on:
   push:
     branches: [ "main" ]
 
-jobs:
-  build:
-    # આ ટેસ્ટ કયા ઓપરેટિંગ સિસ્ટમ સર્વર પર રન થશે? (Ubuntu/Linux પર) [cite: 13]
-    runs-on: ubuntu-latest
+# GitHub Pages પર પબ્લિશ કરવા માટે ખાસ પરમિશન આપવી પડે
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-    # ૧. સૌથી પહેલા તમારો કોડ આ સર્વર પર ડાઉનલોડ (Checkout) થશે
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # ૨. સર્વર પર એક સાદો મેસેજ પ્રિન્ટ કરીને ચેક કરીશું કે પાઇપલાઇન ચાલે છે કે નહીં
-    - name: Run a test message
-      run: echo "Hello! My first CI/CD pipeline is working perfectly!"
+    # GitHub Pages માટે સેટઅપ કરવું
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    # તમારી ફાઈલોને અપલોડ કરવી
+    - name: Upload Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.' # આખા ફોલ્ડરની ફાઈલો અપલોડ થશે
+
+    # વેબસાઇટને લાઈવ (Deploy) કરવી
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
